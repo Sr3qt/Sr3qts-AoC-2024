@@ -40,23 +40,15 @@ std::vector<int> satia(std::vector<std::string> list) {
     return res;
 }
 
+// convert num to a n-ary base.
 std::string get_nary(long long num, long long n = 2) {
     std::string res = "";
     long long biggest_exp = 0;
     while (std::pow(n, biggest_exp + 1) < num + 1) {
         biggest_exp++;
-        if (biggest_exp > 64) {
-            std::cout << "get_nary: biggest_exp is too big";
-            break;
-        }
     }
-    // if (std::pow(n, biggest_exp) != num) {
-    //     biggest_exp--;
-    // }
     for (int digit = std::max((int)biggest_exp, 0); digit >= 0; digit--) {
         for (int power = 1; power <= n; power++) {
-            // std::cout << num - std::pow(n, digit) * power << std::endl;
-            // std::cout <<  digit << power << std::endl;
             if (num - std::pow(n, digit) * power < 0) {
                 res += std::to_string(power - 1);
                 num -= std::pow(n, digit) * (power - 1);
@@ -67,10 +59,37 @@ std::string get_nary(long long num, long long n = 2) {
     return res;
 }
 
+// Function to compute Nth digit
+// from right in base B
+// From https://www.geeksforgeeks.org/find-the-nth-digit-from-right-in-base-b-of-the-given-number-in-decimal-base/
+int nthDigit(int a, int n, int b) {
+    // Skip N-1 Digits in Base B
+    for (int i = 1; i < n; i++)
+        a = a / b;
+
+    // Nth Digit from right in Base B
+    return a % b;
+}
+
+std::string convert_number(long long num, long long n = 2) {
+    std::string res;
+    while (num != 0) {
+        num /= n;
+        long long remainder = num % n;
+        res += std::to_string(num);
+    }
+    return res;
+}
+
 int get_nary_digit(long long num, long long n = 2, int index = 0) {
     auto res = get_nary(num, n);
     if (index >= res.size()) {return 0;}
     return res[res.size() - index - 1] - '0';
+}
+
+int get_nary_digit(std::string nary, int index = 0) {
+    if (index >= nary.size()) {return 0;}
+    return nary[nary.size() - index - 1] - '0';
 }
 
 void test_get_nary() {

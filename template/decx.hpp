@@ -3,6 +3,7 @@
 // DEFAULTS
 #include "../utils/utils.h"
 #include <fstream>
+#include <chrono>
 
 // NEW INCLUDES
 
@@ -24,11 +25,11 @@
 
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
-static int solve1() {
+static long long solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
-	int res = 0;
+	long long res = 0;
 
 
 	while (getline (MyReadFile, myText)) {
@@ -40,11 +41,11 @@ static int solve1() {
 	return res;
 }
 
-static int solve2() {
+static long long solve2() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
-	int res = 0;
+	long long res = 0;
 
 
 	while (getline (MyReadFile, myText)) {
@@ -58,8 +59,15 @@ static int solve2() {
 } // namespace end
 
 void NAMEDAY(solve, CURRENT_DAY)() {
+	auto start = std::chrono::high_resolution_clock::now();
 	print_solve1(NAMEDAY(dec, CURRENT_DAY)::solve1(), CURRENT_DAY);
+	auto mid = std::chrono::high_resolution_clock::now();
+	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(mid - start);
+	std::cout << "Time taken: "  << duration1.count() / 1000.0 << " ms.\n";
 	print_solve2(NAMEDAY(dec, CURRENT_DAY)::solve2(), CURRENT_DAY);
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(stop - mid);
+	std::cout << "Time taken: "  << duration2.count() / 1000.0 << " ms.\n";
 }
 
 #undef NAMEDAY

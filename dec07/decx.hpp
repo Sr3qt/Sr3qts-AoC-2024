@@ -6,7 +6,7 @@
 #include <chrono>
 
 // NEW INCLUDES
-// #include <cmath>
+
 
 #define CURRENT_DAY 07
 
@@ -37,15 +37,10 @@ long long try_addmult(long long result, std::vector<int> numbers) {
 			} else {
 				res += (long long)numbers[j];
 			}
-
-			// std::cout << ((i & (1 << (j - 1))) >> (j - 1));
-
-
 		}
 		if (res == result) {
-			// std::cout << res << std::endl;
-			return res;}
-		// std::cout << std::endl;
+			return res;
+		}
 	}
 	return (long long)0;
 }
@@ -56,42 +51,32 @@ long long try_addmult(long long result, std::vector<int> numbers) {
 long long try_addmultconc(long long result, std::vector<int> numbers) {
 	long long res = 0;
 
-
-	// std::string max_string = get_nary(std::pow(3, numbers.size()), 3);
-
 	for (int i = 0; i < std::pow(3, numbers.size() - 1); i++) {
 		res = (long long)numbers[0];
-		// std::cout << get_nary(i, 3) << " " ;
+		// moving this outside loop is MUCH faster, down to 13.5 s
+		// std::string ternary = get_nary(i, 3);
 		for (int j = 1; j < numbers.size(); j++) {
-			int digit = get_nary_digit(i, 3, j - 1);
-			// std::cout << get_nary_digit(i, 3, j - 1);
-			// int digit = "020"[j - 1] - '0';
+			// much more efficient digit finder, down to 5.4 s s
+			int digit = nthDigit(i, j, 3);
+			// int digit = get_nary_digit(ternary, j -1);
+			// int digit = get_nary_digit(i, 3, j - 1);
 
 			if (digit == 0) {
 				res *= (long long)numbers[j];
 			} else if (digit == 1) {
 				res += (long long)numbers[j];
-			} else if (digit == 2) {
-				// std::cout << "triggered";
-				res = stoll(std::to_string(res) + std::to_string(numbers[j]));
 			} else {
-				std::cout << "NOOOO";
+				res = stoll(std::to_string(res) + std::to_string(numbers[j]));
 			}
 
 			if (res < 0 || res > result) {
 				break;
 			}
-			// std::cout << ((i & (1 << (j - 1))) >> (j - 1));
-
-
 		}
-		// std::cout << ", ";
 		if (res == result) {
-			// std::cout << " " << res << std::endl;
 			return res;
 		}
 	}
-	// std::cout << " " << result << std::endl;
 	return (long long)0;
 }
 
@@ -102,13 +87,10 @@ static long long solve1() {
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
 
-
 	while (getline (MyReadFile, myText)) {
-
 		auto split1 = split(myText, ": ");
 		auto split2 = split(split1[1], " ");
 		res += try_addmult(stoll(split1[0]), satia(split2));
-		// break;
 	}
 
 	MyReadFile.close();
@@ -122,9 +104,7 @@ static long long solve2() {
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
 
-
 	while (getline (MyReadFile, myText)) {
-
 		auto split1 = split(myText, ": ");
 		auto split2 = split(split1[1], " ");
 		res += try_addmultconc(stoll(split1[0]), satia(split2));
