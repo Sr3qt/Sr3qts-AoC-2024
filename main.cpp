@@ -25,27 +25,25 @@ int main(int argc, char* argv[]) {
     switch (get_day(args)) {
         case 1:
             solve01();
-            std::cout << "After solve01 call\n";
             break;
+        case 2:
+            std::cout << "Day not solved in c++.";
         case 3:
             solve03();
-            std::cout << "After solve03 call\n";
             break;
         case 4:
             solve04();
-            std::cout << "After solve04 call\n";
             break;
         case 5:
             solve05();
-            std::cout << "After solve05 call\n";
             break;
+        case 6:
+            std::cout << "Day not solved in c++.";
         case 7:
             solve07();
-            std::cout << "After solve07 call\n";
             break;
         case 8:
             solve08();
-            std::cout << "After solve08 call\n";
             break;
     }
 }

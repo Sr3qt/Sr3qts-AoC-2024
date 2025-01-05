@@ -61,8 +61,8 @@ int count_antinodes(std::unordered_map<char, std::vector<Coordinate>> antennas, 
 				int y_diff = start.y - end.y;
 
 				int new_x1 = start.x + x_diff;
-				int new_x2 = end.x - x_diff;
 				int new_y1 = start.y + y_diff;
+				int new_x2 = end.x - x_diff;
 				int new_y2 = end.y - y_diff;
 				if (in_range(new_x1, 0, width - 1) &&
 					in_range(new_y1, 0, height - 1) &&
@@ -76,6 +76,54 @@ int count_antinodes(std::unordered_map<char, std::vector<Coordinate>> antennas, 
 						unique_positions.push_back(pos_hash(new_x2, new_y2));
 					}
 			}
+		}
+	}
+	return unique_positions.size();
+}
+
+
+// First attempt: 17~ min
+// first try.
+int count_antinodes2(std::unordered_map<char, std::vector<Coordinate>> antennas, int width, int height) {
+	std::vector<int> unique_positions;
+	for (auto const& i : antennas) {
+		auto coordinate_vector = &(i.second);
+		for (int j = 0; j < i.second.size() - 1; j++) {
+			Coordinate start = i.second[j];
+
+			// CHeck all but the last antenna for inclusion
+			if (find(unique_positions, pos_hash(start.x, start.y)) == -1) {
+				unique_positions.push_back(pos_hash(start.x, start.y));
+			}
+			for (int k = j + 1; k < i.second.size(); k++) {
+				Coordinate end = i.second[k];
+				int x_diff = start.x - end.x;
+				int y_diff = start.y - end.y;
+
+				int new_x1 = start.x + x_diff;
+				int new_y1 = start.y + y_diff;
+				int new_x2 = end.x - x_diff;
+				int new_y2 = end.y - y_diff;
+				while (in_range(new_x1, 0, width - 1) && in_range(new_y1, 0, height - 1)) {
+					if (find(unique_positions, pos_hash(new_x1, new_y1)) == -1) {
+						unique_positions.push_back(pos_hash(new_x1, new_y1));
+					}
+					new_x1 += x_diff;
+					new_y1 += y_diff;
+				}
+
+				while (in_range(new_x2, 0, width - 1) && in_range(new_y2, 0, height - 1)) {
+					if (find(unique_positions, pos_hash(new_x2, new_y2)) == -1) {
+						unique_positions.push_back(pos_hash(new_x2, new_y2));
+					}
+					new_x2 -= x_diff;
+					new_y2 -= y_diff;
+				}
+			}
+		}
+		// Check the last antenna for inclusion
+		if (find(unique_positions, pos_hash(i.second.back().x, i.second.back().y)) == -1) {
+			unique_positions.push_back(pos_hash(i.second.back().x, i.second.back().y));
 		}
 	}
 	return unique_positions.size();
@@ -103,13 +151,6 @@ static long long solve1() {
 		line_num++;
 	}
 
-	// for (auto const& i : antennas) {
-	// 	std::cout << i.first << std::endl;
-	// 	for (int j = 0; j < i.second.size(); j++) {
-	// 		std::cout << i.second[j].x << ", " << i.second[j].y << ".\n";
-	// 	}
-	// }
-
 	std::cout << myText.size() << ", " << line_num << "\n";
 
 	res += count_antinodes(antennas, myText.size(), line_num);
@@ -125,10 +166,25 @@ static long long solve2() {
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
 
+	std::unordered_map<char, std::vector<Coordinate>> antennas;
 
+	int line_num = 0;
 	while (getline (MyReadFile, myText)) {
-
+		for (int i = 0; i < myText.size(); i++) {
+			if (myText[i] != '.' && myText[i] != '#') {
+				if (antennas.find(myText[i]) == antennas.end()) {
+					antennas[myText[i]] = std::vector<Coordinate>{{i, line_num}};
+				} else {
+					antennas[myText[i]].push_back({i, line_num});
+				}
+			}
+		}
+		line_num++;
 	}
+
+	std::cout << myText.size() << ", " << line_num << "\n";
+
+	res += count_antinodes2(antennas, myText.size(), line_num);
 
 	MyReadFile.close();
 
