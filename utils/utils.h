@@ -32,6 +32,10 @@ bool in_range(int value, int min, int max) {
     return value >= min && value <= max;
 }
 
+bool xin_range(int value, int min, int max) {
+    return value > min && value < max;
+}
+
 std::vector<int> satia(std::vector<std::string> list) {
     std::vector<int> res;
     for (int i = 0; i < list.size(); i++) {

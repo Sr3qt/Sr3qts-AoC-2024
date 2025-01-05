@@ -5,6 +5,7 @@
 #include "dec04/decx.hpp"
 #include "dec05/decx.hpp"
 #include "dec07/decx.hpp"
+#include "dec08/decx.hpp"
 
 
 int get_day(const std::vector<std::string> args) {
@@ -41,6 +42,10 @@ int main(int argc, char* argv[]) {
         case 7:
             solve07();
             std::cout << "After solve07 call\n";
+            break;
+        case 8:
+            solve08();
+            std::cout << "After solve08 call\n";
             break;
     }
 }
