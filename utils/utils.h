@@ -7,6 +7,13 @@
 
 int test_func3();
 
+
+struct Range {
+    int start;
+    int end;
+};
+
+
 std::vector<std::string> split(const std::string& s, const std::string& delimiter = " ") {
     std::vector<std::string> tokens;
     std::string token = s;
@@ -30,6 +37,10 @@ void print_solve2(long long answer, int day) {
 
 bool in_range(int value, int min, int max) {
     return value >= min && value <= max;
+}
+
+bool in_range(int value, Range range) {
+    return value >= range.start && value <= range.end;
 }
 
 bool xin_range(int value, int min, int max) {

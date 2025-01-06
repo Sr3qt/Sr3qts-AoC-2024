@@ -26,11 +26,6 @@
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
-struct Range {
-	int start;
-	int end;
-};
-
 long long int sum_range(int start, int end) {
 	// int diff = end - start;
 	// return (diff * diff) / 2;
@@ -50,9 +45,6 @@ static long long solve1() {
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
-
-	// Range contains the first memory block index and the index after the last memory block
-	std::vector<Range> empty_spaces;
 
 	getline(MyReadFile, myText);
 
@@ -77,10 +69,8 @@ static long long solve1() {
 					empty.start += leftover;
 					last -= 2;
 					leftover = (myText[last] - '0');
-					// std::cout << res << "Triggers second\n";
 				} else {
 					res += sum_range(first, first + diff) * (last / 2);
-					// std::cout << res << ", " << first << ", " << i << " Triggers first\n";
 					first += diff;
 					leftover -= diff;
 					break;
@@ -101,28 +91,69 @@ static long long solve1() {
 		}
 	}
 
-	for (int i = 0; i < empty_spaces.size(); i++) {
-		Range current_range = empty_spaces[i];
-
-	}
-
-	// try making algorithm move in from both ends.
-	std::cout << myText.size();
-
 	MyReadFile.close();
 
 	return res;
 }
 
+
+// First attempt: 1:07:09
+// First try: 7431795422308 too high
+// got it second try
 static long long solve2() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
 
+	// Range contains the first memory block index and the index after the last memory block
+	std::vector<Range> empty_spaces;
 
-	while (getline (MyReadFile, myText)) {
+	getline(MyReadFile, myText);
 
+	// First make Range array for gaps.
+	// Then loop over in opposite order, try to move every file and count
+
+	// Interesting optimization might be grouping spaces by size, then you can skip checking smaller spaces
+
+	int first = 0; // The curser position in memory
+	for (int i = 0; i < myText.size(); i++) {
+		int block_num = (myText[i] - '0');
+		// if (block_num == 0) {continue;}
+		if (i % 2) {
+			// Range contains the first memory block index and the index after the last memory block
+			empty_spaces.push_back({first, first + block_num});
+
+		}
+		first += block_num;
+	}
+
+	for (int i = myText.size() - 1; 0 < i; i -= 2) {
+		int block_num = (myText[i] - '0');
+		bool fits = false;
+		for (int j = 0; j < empty_spaces.size(); j++) {
+			Range range = empty_spaces[j];
+			if (in_range(range.start + block_num, range)) {
+				// Add new position score
+				res += sum_range(range.start, range.start + block_num) * (i / 2);
+				fits = true;
+
+				empty_spaces[j].start += block_num;
+				// if (empty_spaces[j].start == empty_spaces[j].end) {
+				// 	empty_spaces.erase(empty_spaces.begin() + j);
+				// }
+				// std::cout << res << std::endl;
+				break;
+			}
+		}
+
+		if (!fits) {
+			// Add normal score
+			res += sum_range(empty_spaces.back().end, empty_spaces.back().end + block_num) * (i / 2);
+		}
+		// if (empty_spaces.size() > 0) {
+		empty_spaces.pop_back();
+		// }
 	}
 
 	MyReadFile.close();
