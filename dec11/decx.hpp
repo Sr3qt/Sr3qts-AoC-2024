@@ -69,47 +69,47 @@ static long long solve1() {
 	for (int i = 0; i < 25; i++) {
 		iterate(temp, temp2, running_count);
 		temp.swap(temp2);
-		// std::cout << running_count << std::endl;
 	}
 
 	res = running_count;
 	return res;
 }
 
+long long hasher(long long num, int depth) {
+	if (num >= pow(2, 56)) {std::cout << "Number to high. " << num << std::endl;}
+	return num ^ (((unsigned long)(depth)) << 52);
+}
 
 // First attmempt: 54:11
 // Recursive memoization was faster, but not the right approach.
 // Searched online and it seems that grouping works better.
 // After more researched i found a guy who also solved it using memoization.
 // My implementation must be bugged, will try to fix.
+// NOTE TO SELF: NESTED UMAPS WAS A TERRIBLE IDEA.
+// IDK why but nested unordered maps killed performance, probably because sub maps got out unscoped.
+// first try: 649697260, too low
+// second try: 2089670227099910343, too high. PS: Messed up key and value of map
+// GOT IT THIRD TRY.
 long long recursive(
 	long long num,
 	int depth,
-	std::unordered_map<long long, std::unordered_map<int, long long>>& memory) {
+	std::unordered_map<long long, long long>& memory) {
 
 	// std::cout << "Called: " << num << ", " << depth << "\n";
 
-	if (memory.find(num) != memory.end()) {
+	if (memory.find(hasher(num, depth)) != memory.end()) {
 		// Value has already been calculated.
-		if (memory[num].find(depth) != memory[num].end()) {
-			// Value has already been calculated at this depth.
-			// std::cout << "Remembered value!\n";
-			return memory[num][depth];
-		}
-		// auto temp = recursive(num, depth + 1, memory);
-		// memory[num] = {{depth, temp}};
-		// return temp;
+		return memory[hasher(num, depth)];
 	}
 
 	// Base case. Set number of steps
-	if (depth == 30) {
-		// std::cout << "base cas found\n";
+	if (depth == 75) {
 		return 1 + int(!(floor(log10(num) + 1 % 2)));
 	} else {
 		// Recursively try to find solutions
 		if (num == 0) {
 			auto temp = recursive(1, depth + 1, memory);
-			memory[num] = {{depth, temp}};
+			memory[hasher(num, depth)] = temp;
 			return temp;
 		}
 		if ((long long)floor(log10(num) + 1) % 2 == 0) {
@@ -120,16 +120,15 @@ long long recursive(
 			// If left and right are same, memoization will kick in. Calling twice is fine.
 			auto temp1 = recursive(stoll(left), depth + 1, memory);
 			auto temp2 = recursive(stoll(right), depth + 1, memory);
-			memory[num] = {{depth, temp1 + temp2}};
+			memory[hasher(num, depth)] = temp1 + temp2;
 			return temp1 + temp2;
 		} else {
 			auto temp = recursive(num * 2024, depth + 1, memory);
-			memory[num] = {{depth, temp}};
+			memory[hasher(num, depth)] = temp;
 			return temp;
 		}
 	}
 }
-
 
 // Need recursive memoization bullshit to complete
 static long long solve2() {
@@ -142,23 +141,12 @@ static long long solve2() {
 
 	MyReadFile.close();
 
-	std::unordered_map<long long, std::unordered_map<int, long long>> memory;
+	std::unordered_map<long long, long long> memory;
 	auto temp = split(myText);
 	for (auto const& num : temp) {
 		res += recursive(stoll(num), 0, memory);
 	}
-	// std::vector<std::string> temp2;
-	// int running_count = temp.size();
-	// temp.resize(200000);
-	// temp2.resize(200000);
 
-	// for (int i = 0; i < 25; i++) {
-	// 	iterate(temp, temp2, running_count);
-	// 	temp.swap(temp2);
-	// 	std::cout << running_count << std::endl;
-	// }
-
-	// res = recursive();
 	return res;
 }
 } // namespace end
