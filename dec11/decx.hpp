@@ -27,58 +27,51 @@
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
 
-void iterate(std::vector<std::string>& vec) {
+// another optimization would be to have long int vector instead of string vector
+void iterate(std::vector<std::string>& vec, std::vector<std::string>& out, int& size) {
 	int offset = 0;
-	for (int i = 0; i < vec.size(); i++) {
-		if (i + offset >= vec.size()) {
-			break;
-		}
-		auto item = vec[i + offset];
+	for (int i = 0; i < size; i++) {
+		auto item = vec[i];
 		if (item == "0") {
-			vec[i + offset] = "1"; // WIll this replace value in vector? maybe just use vector indexing
+			out[i + offset] = "1";
 		} else if (item.size() % 2 == 0) {
 			std::string right = std::to_string(stoull(item.substr(item.size() / 2)));
-			// std::cout << right << "\n";
-			vec.insert(vec.begin() + i + offset + 1, right);
-			vec[i + offset] = item.substr(0, item.size() / 2);
+			out[i + offset] = item.substr(0, item.size() / 2);
+			out[i + offset + 1] = right;
 			offset++;
 		} else {
-			vec[i + offset] = std::to_string(stoull(item) * 2024);
+			out[i + offset] = std::to_string(stoull(item) * 2024);
 		}
-
-
-
 	}
+	size += offset;
 }
 
 // First attemp: 34:11
 // Got it first try, however the answer was given after 45s ...
 // Going to optimize
+// After first optimizations, ran in 45~ms!
 static long long solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
 	long long res = 0;
 
-
 	getline (MyReadFile, myText);
-
-	auto temp = split(myText);
-	// temp.reserve(55312);
-
-	for (int i = 0; i < 25; i++) {
-		iterate(temp);
-
-		// for (auto const& i : temp) {
-		// 	std::cout << i << ", ";
-		// }
-		// std::cout << "\n";
-	}
-
-	res = temp.size();
 
 	MyReadFile.close();
 
+	auto temp = split(myText);
+	std::vector<std::string> temp2;
+	int running_count = temp.size();
+	temp.resize(200000);
+	temp2.resize(200000);
+
+	for (int i = 0; i < 25; i++) {
+		iterate(temp, temp2, running_count);
+		temp.swap(temp2);
+	}
+
+	res = running_count;
 	return res;
 }
 
