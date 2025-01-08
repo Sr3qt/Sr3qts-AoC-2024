@@ -76,7 +76,7 @@ static long long solve1() {
 }
 
 long long hasher(long long num, int depth) {
-	if (num >= pow(2, 56)) {std::cout << "Number to high. " << num << std::endl;}
+	// if (num >= pow(2, 56)) {std::cout << "Number to high. " << num << std::endl;}
 	return num ^ (((unsigned long)(depth)) << 52);
 }
 
@@ -102,7 +102,7 @@ long long recursive(
 		return memory[hasher(num, depth)];
 	}
 
-	// Base case. Set number of steps
+	// Base case. Set number of steps. Because of hashing function only supported up to 255 iterations.
 	if (depth == 75) {
 		return 1 + int(!(floor(log10(num) + 1 % 2)));
 	} else {
