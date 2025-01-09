@@ -68,29 +68,26 @@ int count_area2(char letter, int x, int y, std::vector<int>& visited, std::vecto
 	}
 
 	// A side int's 4 least significant digits tell you which sides it has.
-	// The next 4 bits is a record of which sides it has counted.
+	// If we are in-between two letters with same sides, and current letter has those sides as well,
+	// then we *know* that we have double counted those sides.
 	// A side can only be double counted once, we can detect this and remove one count.
 	int temp_int = sides.back();
-	int check = 15;
+	int check = 0b1111;
 	for (int i = 0; i < other_sides.size(); i++) {
 		temp_int ^= (sides.back() & (other_sides[i]));
-		int record = (other_sides[i]);
+		int record = other_sides[i];
 		for (int j = i + 1; j < other_sides.size(); j++) {
-			// record &= (other_sides[j] & 0b11110000);
-			res -= std::__popcount(record & (other_sides[j]) & sides.back());
-			if (record & (other_sides[j]) & sides.back()) {
-				// std::cout << " Dupe ";
-				check ^= record & (other_sides[j]) & sides.back();
+			res -= std::__popcount(record & other_sides[j] & sides.back());
+			if (record & other_sides[j]) {
+				// Since 3 numbers have the same bit set, xoring them sequentially results in true
+				// when we want false. turn off corresponding bit in checker.
+				check ^= record & other_sides[j];
 				break;
 			}
 		}
-		// std::cout << "Removed: " << std::__popcount(record & sides.back()) << ", ";
 	}
 
 	res += std::__popcount(temp_int & check);
-	// sides.back() |= temp_int << 4;
-
-	// std::cout << "Actual: " << std::__popcount(sides.back() & 0b1111) << ", Count: " << std::__popcount(temp_int) << "\n";
 
 	for (int i = 0; i < to_visit.size(); i += 2) {
 		// Need to double check that a position hasn't already been recursively checked.
@@ -193,12 +190,10 @@ static long long solve2() {
 				std::vector<int> sides;
 				std::vector<int> temp;
 				int perimeter = count_area2(map[j][i], i, j, visited, sides, map);
-				// std::cout << map[j][i] << ": " << perimeter << " * " << visited.size() << "\n";
 				temp.reserve(visited.size() + globally_visited.size());
 				temp.insert(temp.end(), globally_visited.begin(), globally_visited.end());
 				temp.insert(temp.end(), visited.begin(), visited.end());
 				temp.swap(globally_visited);
-				// std::cout << i << ", " << j << "\n" << visited.size() * perimeter << "\n";
 				res += visited.size() * perimeter;
 			}
 		}
