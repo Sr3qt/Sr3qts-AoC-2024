@@ -27,7 +27,6 @@
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
 int verify_page_order(std::unordered_map<int, std::vector<int>> rules, std::string line) {
-
 	auto pages = split(line, ",");
 	std::vector<int> seen_pages = {stoi(pages[0])};
 
@@ -50,8 +49,6 @@ int verify_page_order(std::unordered_map<int, std::vector<int>> rules, std::stri
 }
 
 int deverify_page_order(std::unordered_map<int, std::vector<int>> rules, std::string line) {
-
-
 	if (verify_page_order(rules, line) != 0) {
 		return 0;
 	}
@@ -93,7 +90,6 @@ static int solve1() {
 
 		if (myText == "") {
 			defining_rules = false;
-			std::cout << "Empty line found!\n";
 			continue;
 		}
 		if (defining_rules)	{
@@ -129,7 +125,6 @@ static int solve2() {
 	while (getline (MyReadFile, myText)) {
 		if (myText == "") {
 			defining_rules = false;
-			std::cout << "Empty line found!\n";
 			continue;
 		}
 		if (defining_rules)	{

@@ -122,6 +122,7 @@ void NAMEDAY(solve, CURRENT_DAY)() {
 	auto mid = std::chrono::high_resolution_clock::now();
 	auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(mid - start);
 	std::cout << "Time taken: "  << duration1.count() / 1000.0 << " ms.\n";
+	std::cout << "This one takes a little while ...\n";
 	print_solve2(NAMEDAY(dec, CURRENT_DAY)::solve2(), CURRENT_DAY);
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(stop - mid);

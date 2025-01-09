@@ -96,10 +96,10 @@ static long long solve2() {
 	int steps = 0;
 
 	std::cout <<
-	"This solution is kind special, because you have to search for a solution\n" \
-	"manually. At least that was how i did it. You can enter a number to\n" \
-	"increase/decrease the step counter. Inserting 1 will jump by 103 for your\n" \
-	"convenience! Enjoy searching.\n" << "Enter a number:" << std::endl;
+	"This solution is kind of special, because you have to search for a solution manually.\n" \
+	"At least that was how i did it. You can enter a number to increase/decrease the step counter.\n" \
+	"Inserting 0 will skip this and inserting 1 will jump by 103 for your convenience!\n" \
+	"Enjoy searching! (101+ width terminal recommended!)\n" << "Enter a number:" << std::endl;
 
 	while (input != 0) {
 		std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
@@ -107,6 +107,8 @@ static long long solve2() {
 		if (input == 1) {
 			input = 103;
 			if (steps == 0) {steps++;}
+		} else if (input == 0) {
+			break;
 		}
 
 		Pair size = {101, 103};

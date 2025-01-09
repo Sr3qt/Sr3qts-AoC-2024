@@ -28,7 +28,6 @@ static int solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
 	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
-	std::cout << "Tried opening: " << file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt";
 
 	std::vector<int> left;
 	std::vector<int> right;
@@ -96,16 +95,6 @@ void NAMEDAY(solve, CURRENT_DAY)() {
     // Allocate a character array to store the directory path
     char buffer[size];
 
-    // Call _getcwd to get the current working directory and store it in buffer
-    if (getcwd(buffer, size) != NULL) {
-        // print the current working directory
-        std::cout << "Current working directory: " << buffer << std::endl << __FILE__ << std::endl;
-    }
-    else {
-        // If _getcwd returns NULL, print an error message
-        std::cerr << "Error getting current working directory" << std::endl;
-    }
-	std::cout << std::filesystem::current_path() << std::endl;
 	print_solve1(NAMEDAY(dec, CURRENT_DAY)::solve1(), CURRENT_DAY);
 	print_solve2(NAMEDAY(dec, CURRENT_DAY)::solve2(), CURRENT_DAY);
 }

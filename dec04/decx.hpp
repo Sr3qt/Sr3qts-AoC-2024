@@ -30,45 +30,35 @@ namespace NAMEDAY(dec, CURRENT_DAY) {
 // THis is too boring
 int check_down(std::vector<std::string> map, int x, int y) {
 	if (y >= map.size() - 3) return 0;
-
-	// if (map)
-
 	return 1;
 }
 
 int check_up(std::vector<std::string> map, int x, int y) {
 	if (y < 3) return 0;
-
 	return 1;
 }
 int check_downleft(std::vector<std::string> map, int x, int y) {
 	if (y >= map.size() - 3 || x < 3) return 0;
-
 	return 1;
 }
 int check_downright(std::vector<std::string> map, int x, int y) {
 	if (y >= map.size() - 3 || x > map.size() - 3) return 0;
-
 	return 1;
 }
 int check_upleft(std::vector<std::string> map, int x, int y) {
 	if (y < 3 || x < 3) return 0;
-
 	return 1;
 }
 int check_upright(std::vector<std::string> map, int x, int y) {
 	if (y < 3 || x > map.size() - 3) return 0;
-
 	return 1;
 }
 int check_left(std::vector<std::string> map, int x, int y) {
 	if (x < 3) return 0;
-
 	return 1;
 }
 int check_right(std::vector<std::string> map, int x, int y) {
 	if (x > map.size() - 3) return 0;
-
 	return 1;
 }
 
@@ -114,7 +104,6 @@ int check_index(std::vector<std::string> map, int x, int y, std::string word) {
 	return res;
 }
 
-
 int find_mas(std::vector<std::string> map, int x, int y) {
 	if (x == 0 || x == map.size() - 1 || y == 0 || y == map.size() - 1) {
 		return 0;
@@ -136,8 +125,6 @@ int find_mas(std::vector<std::string> map, int x, int y) {
 	return 0;
 }
 
-
-
 static int solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
@@ -149,7 +136,6 @@ static int solve1() {
 		word_search.push_back(myText);
 	}
 
-	std::cout << "BEfore loop" << word_search.size();
 	for (int i = 0; i < word_search.size(); i++) {
 		for (int j = 0; j < word_search[0].size(); j++) {
 			if (word_search[j][i] == 'X') {

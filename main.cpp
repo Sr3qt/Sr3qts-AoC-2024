@@ -29,7 +29,11 @@ int get_day(const std::vector<std::string> args) {
     // std::vector<string>
     for (int i = 0; i < args.size(); i++) {
         if (args[i].find("-d") != std::string::npos) {
-            return stoi(args[i].substr(2));
+            if (args[i].substr(2) != "") {
+                return stoi(args[i].substr(2));
+            } else {
+                return stoi(args[i + 1]);
+            }
         }
     }
     return -1;
@@ -44,7 +48,8 @@ int main(int argc, char* argv[]) {
             solve01();
             break;
         case 2:
-            std::cout << "Day not solved in c++.";
+            std::cout << "Day not solved in c++.\n";
+            break;
         case 3:
             solve03();
             break;
@@ -55,7 +60,8 @@ int main(int argc, char* argv[]) {
             solve05();
             break;
         case 6:
-            std::cout << "Day not solved in c++.";
+            std::cout << "Day not solved in c++.\n";
+            break;
         case 7:
             solve07();
             break;
@@ -114,7 +120,7 @@ int main(int argc, char* argv[]) {
         //     solve25();
         //     break;
         default:
-            std::cout << "Sorry, invalid day." << std::endl;
+            std::cout << "Sorry, that is an unsolved day." << std::endl;
             break;
     }
 }

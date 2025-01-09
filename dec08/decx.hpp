@@ -151,8 +151,6 @@ static long long solve1() {
 		line_num++;
 	}
 
-	std::cout << myText.size() << ", " << line_num << "\n";
-
 	res += count_antinodes(antennas, myText.size(), line_num);
 
 	MyReadFile.close();
@@ -181,8 +179,6 @@ static long long solve2() {
 		}
 		line_num++;
 	}
-
-	std::cout << myText.size() << ", " << line_num << "\n";
 
 	res += count_antinodes2(antennas, myText.size(), line_num);
 
