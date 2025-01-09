@@ -6,6 +6,7 @@
 #include <chrono>
 
 // NEW INCLUDES
+#include <bitset>
 
 
 #define CURRENT_DAY 12
@@ -99,21 +100,21 @@ int count_area2(char letter, int x, int y, std::vector<int>& visited, std::vecto
 	return res;
 }
 
-// Returns area of a block given a letter and start position.
-// Read visited.size() to see block area.
-int count_area(char letter, int x, int y, std::vector<int>& visited, std::vector<std::string>& map) {
+// Returns perimeter of a block given a letter and start position.
+// Read count to see block area.
+int count_area(char letter, int x, int y, int* count, std::bitset<140> (&visited)[140], std::vector<std::string>& map) {
 	int res = 0;
 	const int combs[8] = {-1, 0, 1, 0, 0, -1, 0, 1};
 	const Range x_range = {0, int(map[0].size()) - 1}; // inclusive ranges of valid indices
 	const Range y_range = {0, int(map.size()) - 1};
-	visited.push_back(score_hash(x, y));
+	visited[y][x] = 1;
+	(*count)++;
 	for (int i = 0; i < 8; i += 2) {
 		int x2 = x + combs[i];
 		int y2 = y + combs[i + 1];
 		if (in_range(x2, x_range) && in_range(y2, y_range) && map[y2][x2] == letter) {
-			// std::cout << "Found end!\n";
-			if (find(visited, score_hash(x2, y2)) == -1) {
-				res += count_area(letter, x2, y2, visited, map);
+			if (!visited[y2][x2]) {
+				res += count_area(letter, x2, y2, count, visited, map);
 			}
 		} else {
 			res++;
@@ -131,8 +132,7 @@ static long long solve1() {
 	long long res = 0;
 
 	std::vector<std::string> map;
-	std::vector<int> globally_visited;
-	// globally_visited.reserve(140 * 140);
+	std::bitset<140> visited[140];
 
 	while (getline (MyReadFile, myText)) {
 		map.push_back(myText);
@@ -140,21 +140,13 @@ static long long solve1() {
 
 	MyReadFile.close();
 
+	int count = 0;
 	for (int i = 0; i < map[0].size(); i++) {
 		for (int j = 0; j < map.size(); j++) {
-
-			if (find(globally_visited, score_hash(i, j)) == -1) {
-				std::vector<int> visited;
-				std::vector<int> temp;
-				int perimeter = count_area(map[j][i], i, j, visited, map);
-				// std::cout << map[j][i] << ": " << perimeter << " * " << visited.size() << "\n";
-				temp.reserve(visited.size() + globally_visited.size());
-				temp.insert(temp.end(), globally_visited.begin(), globally_visited.end());
-				temp.insert(temp.end(), visited.begin(), visited.end());
-				temp.swap(globally_visited);
-				// globally_visited.insert(globally_visited.end(), visited.begin(), visited.end());
-				// std::cout << i << ", " << j << "\n" << visited.size() * perimeter << "\n";
-				res += visited.size() * perimeter;
+			if (!visited[j][i]) {
+				int perimeter = count_area(map[j][i], i, j, &count, visited, map);
+				res += count * perimeter;
+				count = 0;
 			}
 		}
 	}

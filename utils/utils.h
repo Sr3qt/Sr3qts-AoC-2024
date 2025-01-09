@@ -47,7 +47,7 @@ bool xin_range(int value, int min, int max) {
     return value > min && value < max;
 }
 
-int find(std::vector<int> vec, int value) {
+int find(std::vector<int>& vec, int value) {
 	for (int i = 0; i < vec.size(); i++) {
 		if (vec[i] == value) {
 			return i;
