@@ -40,31 +40,30 @@ int score_hash(int x, int y) {
 
 // Returns perimeter of a block given a letter and start position.
 // Read visited.size() to see block area.
-int count_area2(char letter, int x, int y, std::vector<int>& visited, std::vector<int>& sides, std::vector<std::string>& map) {
+int count_area2(char letter, int x, int y, int* count, std::vector<std::vector<bool>>& visited, std::vector<std::vector<int>>& sides, std::vector<std::string>& map) {
 	int res = 0;
 	const int combs[8] = {-1, 0, 1, 0, 0, -1, 0, 1};
 	const int dirs[4] = {LEFT, UP, RIGHT, DOWN};
 	const Range x_range = {0, int(map[0].size()) - 1}; // inclusive ranges of valid indices
 	const Range y_range = {0, int(map.size()) - 1};
-	visited.push_back(score_hash(x, y));
-	sides.push_back(0);
+	visited[y][x] = true;
+	sides[y][x] = 0;
 	// std::cout << x << ", " << y << ". ";
 	std::vector<int> to_visit;
 	std::vector<int> other_sides;
+	(*count)++;
 	for (int i = 0; i < 8; i += 2) {
 		int x2 = x + combs[i];
 		int y2 = y + combs[i + 1];
 		if (in_range(x2, x_range) && in_range(y2, y_range) && map[y2][x2] == letter) {
-			// std::cout << "Found end!\n";
-			int pos = find(visited, score_hash(x2, y2));
-			if (pos == -1) {
+			if (!visited[y2][x2]) {
 				to_visit.push_back(x2);
 				to_visit.push_back(y2);
 			} else {
-				other_sides.push_back(sides[pos]);
+				other_sides.push_back(sides[y2][x2]);
 			}
 		} else {
-			sides.back() += dirs[i / 2];
+			sides[y][x] += dirs[i / 2];
 		}
 	}
 
@@ -72,13 +71,13 @@ int count_area2(char letter, int x, int y, std::vector<int>& visited, std::vecto
 	// If we are in-between two letters with same sides, and current letter has those sides as well,
 	// then we *know* that we have double counted those sides.
 	// A side can only be double counted once, we can detect this and remove one count.
-	int temp_int = sides.back();
+	int temp_int = sides[y][x];
 	int check = 0b1111;
 	for (int i = 0; i < other_sides.size(); i++) {
-		temp_int ^= (sides.back() & (other_sides[i]));
+		temp_int ^= (sides[y][x] & (other_sides[i]));
 		int record = other_sides[i];
 		for (int j = i + 1; j < other_sides.size(); j++) {
-			res -= std::__popcount(record & other_sides[j] & sides.back());
+			res -= std::__popcount(record & other_sides[j] & sides[y][x]);
 			if (record & other_sides[j]) {
 				// Since 3 numbers have the same bit set, xoring them sequentially results in true
 				// when we want false. turn off corresponding bit in checker.
@@ -89,11 +88,12 @@ int count_area2(char letter, int x, int y, std::vector<int>& visited, std::vecto
 	}
 
 	res += std::__popcount(temp_int & check);
+	// std::cout << std::__popcount(temp_int & check) << "\n";
 
 	for (int i = 0; i < to_visit.size(); i += 2) {
 		// Need to double check that a position hasn't already been recursively checked.
-		if (find(visited, score_hash(to_visit[i], to_visit[i + 1])) == -1) {
-			res += count_area2(letter, to_visit[i], to_visit[i + 1], visited, sides, map);
+		if (!visited[to_visit[i + 1]][to_visit[i]]) {
+			res += count_area2(letter, to_visit[i], to_visit[i + 1], count, visited, sides, map);
 
 		}
 	}
@@ -166,7 +166,9 @@ static long long solve2() {
 	long long res = 0;
 
 	std::vector<std::string> map;
-	std::vector<int> globally_visited;
+	std::vector<std::vector<bool>> visited;
+	std::vector<std::vector<int>> sides;
+	int count = 0;
 
 	while (getline (MyReadFile, myText)) {
 		map.push_back(myText);
@@ -174,19 +176,22 @@ static long long solve2() {
 
 	MyReadFile.close();
 
+	for (int i = 0; i < map.size(); i++) {
+		std::vector<bool> temp1;
+		std::vector<int> temp2;
+		temp1.resize(map[0].size());
+		temp2.resize(map[0].size());
+		visited.push_back(temp1);
+		sides.push_back(temp2);
+	}
+
 	for (int i = 0; i < map[0].size(); i++) {
 		for (int j = 0; j < map.size(); j++) {
-
-			if (find(globally_visited, score_hash(i, j)) == -1) {
-				std::vector<int> visited;
-				std::vector<int> sides;
-				std::vector<int> temp;
-				int perimeter = count_area2(map[j][i], i, j, visited, sides, map);
-				temp.reserve(visited.size() + globally_visited.size());
-				temp.insert(temp.end(), globally_visited.begin(), globally_visited.end());
-				temp.insert(temp.end(), visited.begin(), visited.end());
-				temp.swap(globally_visited);
-				res += visited.size() * perimeter;
+			if (!visited[j][i]) {
+				int perimeter = count_area2(map[j][i], i, j, &count, visited, sides, map);
+				// std::cout << map[j][i] << ": " << perimeter << ", " << count << "\n";
+				res += count * perimeter;
+				count = 0;
 			}
 		}
 	}
