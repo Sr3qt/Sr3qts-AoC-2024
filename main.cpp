@@ -10,6 +10,19 @@
 #include "dec10/decx.hpp"
 #include "dec11/decx.hpp"
 #include "dec12/decx.hpp"
+// #include "dec13/decx.hpp"
+#include "dec14/decx.hpp"
+// #include "dec15/decx.hpp"
+// #include "dec16/decx.hpp"
+// #include "dec17/decx.hpp"
+// #include "dec18/decx.hpp"
+// #include "dec19/decx.hpp"
+// #include "dec20/decx.hpp"
+// #include "dec21/decx.hpp"
+// #include "dec22/decx.hpp"
+// #include "dec23/decx.hpp"
+// #include "dec24/decx.hpp"
+// #include "dec25/decx.hpp"
 
 
 int get_day(const std::vector<std::string> args) {
@@ -60,6 +73,48 @@ int main(int argc, char* argv[]) {
             break;
         case 12:
             solve12();
+            break;
+        // case 13:
+        //     solve13();
+        //     break;
+        case 14:
+            solve14();
+            break;
+        // case 15:
+        //     solve15();
+        //     break;
+        // case 16:
+        //     solve16();
+        //     break;
+        // case 17:
+        //     solve17();
+        //     break;
+        // case 18:
+        //     solve18();
+        //     break;
+        // case 19:
+        //     solve19();
+        //     break;
+        // case 20:
+        //     solve20();
+        //     break;
+        // case 21:
+        //     solve21();
+        //     break;
+        // case 22:
+        //     solve22();
+        //     break;
+        // case 23:
+        //     solve23();
+        //     break;
+        // case 24:
+        //     solve24();
+        //     break;
+        // case 25:
+        //     solve25();
+        //     break;
+        default:
+            std::cout << "Sorry, invalid day." << std::endl;
             break;
     }
 }
