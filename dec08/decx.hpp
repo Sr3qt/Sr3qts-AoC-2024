@@ -16,14 +16,6 @@
 #define MACRO3(CURRENT_DAY, x) MACRO1(CURRENT_DAY, x)
 #define NAMEDAY(name, x) MACRO3(name, x)
 
-#ifndef OS_SEP
-	#ifdef WIN32
-	#define OS_SEP '\\'
-	#else
-	#define OS_SEP '/'
-	#endif
-#endif
-
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
@@ -132,7 +124,7 @@ int count_antinodes2(std::unordered_map<char, std::vector<Coordinate>> antennas,
 static long long solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	long long res = 0;
 
 	std::unordered_map<char, std::vector<Coordinate>> antennas;
@@ -161,7 +153,7 @@ static long long solve1() {
 static long long solve2() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	long long res = 0;
 
 	std::unordered_map<char, std::vector<Coordinate>> antennas;

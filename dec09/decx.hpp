@@ -15,14 +15,6 @@
 #define MACRO3(CURRENT_DAY, x) MACRO1(CURRENT_DAY, x)
 #define NAMEDAY(name, x) MACRO3(name, x)
 
-#ifndef OS_SEP
-	#ifdef WIN32
-	#define OS_SEP '\\'
-	#else
-	#define OS_SEP '/'
-	#endif
-#endif
-
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
@@ -43,7 +35,7 @@ long long int sum_range(int start, int end) {
 static long long solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	long long res = 0;
 
 	getline(MyReadFile, myText);
@@ -103,7 +95,7 @@ static long long solve1() {
 static long long solve2() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	long long res = 0;
 
 	// Range contains the first memory block index and the index after the last memory block

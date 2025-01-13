@@ -14,14 +14,6 @@
 #define MACRO3(CURRENT_DAY, x) MACRO1(CURRENT_DAY, x)
 #define NAMEDAY(name, x) MACRO3(name, x)
 
-#ifndef OS_SEP
-	#ifdef WIN32
-	#define OS_SEP '\\'
-	#else
-	#define OS_SEP '/'
-	#endif
-#endif
-
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 int find_muls(std::string line) {
@@ -63,7 +55,7 @@ int find_muls(std::string line) {
 static int solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	int res = 0;
 
 	while (getline (MyReadFile, myText)) {
@@ -83,7 +75,7 @@ static int solve2() {
 	int res = 0;
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 
 
 	while (getline (MyReadFile, myText)) {

@@ -14,14 +14,6 @@
 #define MACRO3(CURRENT_DAY, x) MACRO1(CURRENT_DAY, x)
 #define NAMEDAY(name, x) MACRO3(name, x)
 
-#ifndef OS_SEP
-	#ifdef WIN32
-	#define OS_SEP '\\'
-	#else
-	#define OS_SEP '/'
-	#endif
-#endif
-
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
@@ -128,7 +120,7 @@ int find_mas(std::vector<std::string> map, int x, int y) {
 static int solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	int res = 0;
 
 	std::vector<std::string> word_search;
@@ -153,7 +145,7 @@ static int solve1() {
 static int solve2() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	int res = 0;
 
 	std::vector<std::string> word_search;

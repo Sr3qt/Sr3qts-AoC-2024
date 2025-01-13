@@ -26,7 +26,6 @@
 
 
 int get_day(const std::vector<std::string> args) {
-    // std::vector<string>
     for (int i = 0; i < args.size(); i++) {
         if (args[i].find("-d") != std::string::npos) {
             if (args[i].substr(2) != "") {

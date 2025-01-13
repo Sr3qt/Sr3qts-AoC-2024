@@ -15,14 +15,6 @@
 #define MACRO3(CURRENT_DAY, x) MACRO1(CURRENT_DAY, x)
 #define NAMEDAY(name, x) MACRO3(name, x)
 
-#ifndef OS_SEP
-	#ifdef WIN32
-	#define OS_SEP '\\'
-	#else
-	#define OS_SEP '/'
-	#endif
-#endif
-
 
 namespace NAMEDAY(dec, CURRENT_DAY) {
 
@@ -45,7 +37,7 @@ Pair simulate_movement(Pair pos, Pair vel, Pair size, int steps) {
 static long long solve1() {
 	std::string myText;
 	std::string file = std::string(__FILE__);
-	std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+	std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 	long long res = 0;
 
 	Pair size = {101, 103};
@@ -102,7 +94,7 @@ static long long solve2() {
 	"Enjoy searching! (101+ width terminal recommended!)\n" << "Enter a number:" << std::endl;
 
 	while (input != 0) {
-		std::fstream MyReadFile(file.substr(0, file.rfind(OS_SEP)) + OS_SEP + "data.txt");
+		std::fstream MyReadFile(file.substr(0, file.rfind('/')) + "/data.txt");
 		std::cin >> input;
 		if (input == 1) {
 			input = 103;

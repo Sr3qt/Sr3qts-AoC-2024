@@ -56,6 +56,19 @@ int find(std::vector<int>& vec, int value) {
 	return -1;
 }
 
+// Apparentley
+std::string unix_to_windows_path(std::string path) {
+    std::string res;
+    for (auto& i : path) {
+        if (i == '/') {
+            res.push_back('\\');
+        } else {
+            res.push_back(i);
+        }
+    }
+    return res;
+}
+
 std::vector<int> satia(std::vector<std::string> list) {
     std::vector<int> res;
     for (int i = 0; i < list.size(); i++) {
