@@ -1,9 +1,11 @@
 #include <iostream>
 #include "utils/utils.h"
 #include "dec01/dec1.hpp"
+// #include "dec02/dec1.hpp"
 #include "dec03/decx.hpp"
 #include "dec04/decx.hpp"
 #include "dec05/decx.hpp"
+// #include "dec06/decx.hpp"
 #include "dec07/decx.hpp"
 #include "dec08/decx.hpp"
 #include "dec09/decx.hpp"
